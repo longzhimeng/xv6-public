@@ -179,6 +179,7 @@ UPROGS=\
 	_sh\
 	_stressfs\
 	_wc\
+	_app\
 	_zombie\
 	_date\
 
@@ -249,7 +250,7 @@ qemu-nox-gdb: fs.img xv6.img .gdbinit
 
 EXTRA=\
 	mkfs.c ulib.c user.h cat.c echo.c forktest.c grep.c kill.c\
-	ln.c ls.c mkdir.c rm.c stressfs.c usertests.c wc.c  zombie.c date.c\
+	ln.c ls.c mkdir.c rm.c stressfs.c usertests.c wc.c app.c zombie.c date.c\
 	printf.c scanf.c umalloc.c\
 	README dot-bochsrc *.pl toc.* runoff runoff1 runoff.list\
 	.gdbinit.tmpl gdbutil\
