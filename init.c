@@ -19,7 +19,14 @@ main(void)
   dup(0);  // stdout
   dup(0);  // stderr
 
-  printf(1, "albert:init starting\n");
+  #ifdef DEFAULT
+    printf(1, "Scheduler policy: DEFAULT\n");
+  #else
+  #ifdef FCFS
+    printf(1, "Scheduler policy: FCFS\n");
+  #endif
+  #endif
+
   for(;;){
     printf(1, "init:starting sh\n");
     pid = fork();
