@@ -32,3 +32,4 @@ SYSCALL(uptime)
 //albert
 SYSCALL(date)
 SYSCALL(alarm)
+SYSCALL(cps)

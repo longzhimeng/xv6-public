@@ -119,3 +119,11 @@ sys_alarm(void)
 	myproc()->alarmhandler = handler;
 	return 0;
 }
+
+
+//albert
+int 
+sys_cps(void)
+{
+	return cps();
+}

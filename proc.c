@@ -89,7 +89,6 @@ found:
   p->state = EMBRYO;
   p->pid = nextpid++;
   p->curalarmticks = 0;
-
   p->ctime = ticks;
   release(&ptable.lock);
 
@@ -357,12 +356,12 @@ scheduler(void)
               if (minP != 0){
                 // here I find the process with the lowest creation time (the first one that was created)
                 if(p->ctime < minP->ctime)
-				  cprintf("albert:minP->pid=%d,minP->name=%s\n",minP->pid,minP->name);
+//				  cprintf("albert:minP->pid=%d,minP->name=%s\n",minP->pid,minP->name);
                   minP = p;
               }
               else{
                   minP = p;
-				  cprintf("albert-1:minP->pid=%d,minP->name=%s\n",minP->pid,minP->name);
+//				  cprintf("albert-1:minP->pid=%d,minP->name=%s\n",minP->pid,minP->name);
 			  }
             }
 
@@ -383,7 +382,7 @@ scheduler(void)
             c->proc = p;
             switchuvm(p);
             p->state = RUNNING;
-			cprintf("Process %s with pid %d running\n",p->name,p->pid);
+//			cprintf("Process %s with pid %d running\n",p->name,p->pid);
 
             swtch(&(c->scheduler), p->context);
             switchkvm();
@@ -623,4 +622,31 @@ procdump(void)
     }
     cprintf("\n");
   }
+}
+
+
+
+//albert:current process status
+int 
+cps(void)
+{
+  struct proc *p;
+
+  // Enable interrupts on this processor.
+  sti();
+
+    // Loop over process table looking for process with pid.
+  acquire(&ptable.lock);
+  cprintf("name \t pid \t state \n");
+
+  for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+  	if (p->state == SLEEPING){
+    	cprintf("%s \t %d  \t SLEEPING \n ", p->name, p->pid);
+	}else if (p->state == RUNNING)
+        cprintf("%s \t %d  \t RUNNING \n ", p->name, p->pid);
+  }
+  
+  release(&ptable.lock);
+  
+  return 22;
 }

@@ -26,6 +26,7 @@ int uptime(void);
 //albert
 int date(struct rtcdate *);
 int alarm(int ticks,void (*handler)());
+int cps(void);
 
 // ulib.c
 int stat(const char*, struct stat*);

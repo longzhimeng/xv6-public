@@ -1,9 +1,5 @@
 struct buf;
-struct context;
-struct file;
-struct inode;
-struct pipe;
-struct proc;
+struct context; struct file; struct inode; struct pipe; struct proc;
 struct rtcdate;
 struct spinlock;
 struct sleeplock;
@@ -120,6 +116,8 @@ void            userinit(void);
 int             wait(void);
 void            wakeup(void*);
 void            yield(void);
+//albert
+int             cps (void);
 
 // swtch.S
 void            swtch(struct context**, struct context*);
