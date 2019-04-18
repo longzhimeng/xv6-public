@@ -54,6 +54,21 @@ trap(struct trapframe *tf)
       wakeup(&ticks);
       release(&tickslock);
     }
+
+	// when timer interrupt comes from userspace
+	if(myproc() && (tf->cs & 3) == 3){
+		myproc()->curalarmticks++;
+		if(myproc()->alarmticks && 
+				myproc()->curalarmticks >= myproc()->alarmticks){
+			tf->esp -= 4;
+			*(uint *)(tf->esp) = tf->eip;
+			// Set handler as the next instruction
+			tf->eip = (uint)myproc()->alarmhandler;
+			myproc()->curalarmticks = 0;
+			cprintf("EIP: %p, SS: %p, ESP: %p(%p), Handler: %p\n",tf->eip,tf->ss,tf->esp, *(uint*)tf->esp, myproc()->alarmhandler);
+		}
+	}
+	
     lapiceoi();
     break;
   case T_IRQ0 + IRQ_IDE:

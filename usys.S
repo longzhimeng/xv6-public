@@ -31,3 +31,4 @@ SYSCALL(sleep)
 SYSCALL(uptime)
 //albert
 SYSCALL(date)
+SYSCALL(alarm)
