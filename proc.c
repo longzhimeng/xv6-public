@@ -90,6 +90,7 @@ found:
   p->pid = nextpid++;
   p->curalarmticks = 0;
 
+  p->ctime = ticks;
   release(&ptable.lock);
 
   // Allocate kernel stack.
@@ -131,6 +132,7 @@ userinit(void)
     panic("userinit: out of memory?");
   inituvm(p->pgdir, _binary_initcode_start, (int)_binary_initcode_size);
   p->sz = PGSIZE;
+  p->ctime = ticks;
   memset(p->tf, 0, sizeof(*p->tf));
   p->tf->cs = (SEG_UCODE << 3) | DPL_USER;
   p->tf->ds = (SEG_UDATA << 3) | DPL_USER;
@@ -295,6 +297,7 @@ wait(void)
         p->parent = 0;
         p->name[0] = 0;
         p->killed = 0;
+		p->ctime = 0;
         p->state = UNUSED;
         release(&ptable.lock);
         return pid;
@@ -323,41 +326,126 @@ wait(void)
 void
 scheduler(void)
 {
-  struct proc *p;
+  struct proc *p = 0;
+
   struct cpu *c = mycpu();
   c->proc = 0;
-  
-  for(;;){
-    // Enable interrupts on this processor.
-    sti();
 
-    // Loop over process table looking for process to run.
-    acquire(&ptable.lock);
-    for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
-      if(p->state != RUNNABLE)
-        continue;
-	 // cprintf("albert:p->pid=%d,p->name=%s\n",p->pid,p->name);
+  for(;;)
+  {
+      // Enable interrupts on this processor.
+      sti();
 
-      // Switch to chosen process.  It is the process's job
-      // to release ptable.lock and then reacquire it
-      // before jumping back to us.
-      c->proc = p;
-      switchuvm(p);
-      p->state = RUNNING;
+      // Loop over process table looking for process to run.
+      acquire(&ptable.lock);
+      for(p = ptable.proc; p < &ptable.proc[NPROC]; p++)
+      {
 
-	 // c->scheduler points to current context & restore the context of p
-      swtch(&(c->scheduler), p->context);
-      switchkvm();
+          #ifdef DEFAULT
+              if(p->state != RUNNABLE)
+                continue;
+          #else
+          #ifdef FCFS
+            struct proc *minP = 0;
 
-      // Process is done running for now.
-      // It should have changed its p->state before coming back.
-      c->proc = 0;
-    }
-    release(&ptable.lock);
+            if(p->state != RUNNABLE)
+              continue;
 
+            // ignore init and sh processes from FCFS
+            if(p->pid > 1)
+            {
+              if (minP != 0){
+                // here I find the process with the lowest creation time (the first one that was created)
+                if(p->ctime < minP->ctime)
+				  cprintf("albert:minP->pid=%d,minP->name=%s\n",minP->pid,minP->name);
+                  minP = p;
+              }
+              else{
+                  minP = p;
+				  cprintf("albert-1:minP->pid=%d,minP->name=%s\n",minP->pid,minP->name);
+			  }
+            }
+
+            // If I found the process which I created first and it is runnable I run it
+            //(in the real FCFS I should not check if it is runnable, but for testing purposes I have to make this control, 
+			//otherwise every time I launch a process which does I/0 operation (every simple command) everything will be blocked
+            if(minP != 0 && minP->state == RUNNABLE)
+                p = minP;
+          #endif
+          #endif
+
+          if(p != 0)
+          {
+
+            // Switch to chosen process.  It is the process's job
+            // to release ptable.lock and then reacquire it
+            // before jumping back to us.
+            c->proc = p;
+            switchuvm(p);
+            p->state = RUNNING;
+
+            swtch(&(c->scheduler), p->context);
+            switchkvm();
+
+            // Process is done running for now.
+            // It should have changed its p->state before coming back.
+            c->proc = 0;
+          }
+        }
+
+        release(&ptable.lock);
   }
 }
 
+
+//PAGEBREAK: 42
+// Per-CPU process scheduler.
+// Each CPU calls scheduler() after setting itself up.
+// Scheduler never returns.  It loops, doing:
+//  - choose a process to run
+//  - swtch to start running that process
+//  - eventually that process transfers control
+//      via swtch back to the scheduler.
+/*
+ * void
+ * scheduler(void)
+ * {
+ *   struct proc *p;
+ *   struct cpu *c = mycpu();
+ *   c->proc = 0;
+ *   
+ *   for(;;){
+ *     // Enable interrupts on this processor.
+ *     sti();
+ * 
+ *     // Loop over process table looking for process to run.
+ *     acquire(&ptable.lock);
+ *     for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+ *       if(p->state != RUNNABLE)
+ *         continue;
+ *      // cprintf("albert:p->pid=%d,p->name=%s\n",p->pid,p->name);
+ * 
+ *       // Switch to chosen process.  It is the process's job
+ *       // to release ptable.lock and then reacquire it
+ *       // before jumping back to us.
+ *       c->proc = p;
+ *       switchuvm(p);
+ *       p->state = RUNNING;
+ * 
+ *      // c->scheduler points to current context & restore the context of p
+ *       swtch(&(c->scheduler), p->context);
+ *       switchkvm();
+ * 
+ *       // Process is done running for now.
+ *       // It should have changed its p->state before coming back.
+ *       c->proc = 0;
+ *     }
+ *     release(&ptable.lock);
+ * 
+ *   }
+ * }
+ * 
+ */
 // Enter scheduler.  Must hold only ptable.lock
 // and have changed proc->state. Saves and restores
 // intena because intena is a property of this
