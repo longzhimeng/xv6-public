@@ -24,3 +24,4 @@
 #define SYS_date   22
 #define SYS_alarm  23
 #define SYS_cps    24
+#define SYS_getptable 25

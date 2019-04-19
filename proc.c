@@ -643,10 +643,14 @@ cps(void)
   	if (p->state == SLEEPING){
     	cprintf("%s \t %d  \t SLEEPING \n ", p->name, p->pid);
 	}else if (p->state == RUNNING)
-        cprintf("%s \t %d  \t RUNNING \n ", p->name, p->pid);
+        cprintf("%s \t %d  \t RUNNING  \n ", p->name, p->pid);
   }
   
   release(&ptable.lock);
   
   return 22;
+}
+
+struct proc *getptable_proc(void) {
+  return ptable.proc;
 }

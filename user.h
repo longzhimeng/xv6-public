@@ -27,6 +27,7 @@ int uptime(void);
 int date(struct rtcdate *);
 int alarm(int ticks,void (*handler)());
 int cps(void);
+int getptable(int, void*);
 
 // ulib.c
 int stat(const char*, struct stat*);

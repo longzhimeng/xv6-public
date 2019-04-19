@@ -108,6 +108,7 @@ extern int sys_uptime(void);
 extern int sys_date(void);
 extern int sys_alarm(void);
 extern int sys_cps(void);
+extern int sys_getptable(void);
 
 static int (*syscalls[])(void) = {
 [SYS_fork]    sys_fork,
@@ -135,6 +136,7 @@ static int (*syscalls[])(void) = {
 [SYS_date]    sys_date,
 [SYS_alarm]   sys_alarm,
 [SYS_cps]     sys_cps,
+[SYS_getptable] sys_getptable,
 };
 
 //albert
