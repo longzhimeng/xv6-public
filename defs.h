@@ -118,6 +118,7 @@ void            wakeup(void*);
 void            yield(void);
 //albert
 int             cps (void);
+int 			chpr(int,int);
 
 // swtch.S
 void            swtch(struct context**, struct context*);

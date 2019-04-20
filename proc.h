@@ -54,6 +54,8 @@ struct proc {
   int alarmticks;
   int curalarmticks;
   void (*alarmhandler)();
+  //alabert
+  int priority;  			//process priority
 };
 
 // Process memory is laid out contiguously, low addresses first:
