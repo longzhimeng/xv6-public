@@ -26,19 +26,19 @@ main(int argc,char *argv[])
 			printf(1,"%d failed in fork!\n",getpid());
 			exit();
 		}else if(pid > 0){ //parent
-			printf(1,"Parent %d creating child %d\n",getpid(),pid);	
+		//	printf(1,"Parent %d creating child %d\n",getpid(),pid);	
 			wait();
 		}else{ //child
-			printf(1,"Child %d have created.\n",getpid());
-			/*
-			 * for(z = 0;z < 300000.0; z += 0.1)
-			 *      x = x+3.14*89.64;
-			 */
+		//	printf(1,"Child %d have created.\n",getpid());
+			for(z = 0;z < 800000.0; z += 0.1)
+				 x = x+3.14*89.64;
 			break;
 		}
 	}
 
-	for(z = 0;z < 300000.0; z += 0.1)
-		x = x+3.14*89.64;
+	/*
+	 * for(z = 0;z < 300000.0; z += 0.1)
+	 *     x = x+3.14*89.64;
+	 */
 	exit();
 }
