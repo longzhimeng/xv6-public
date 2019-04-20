@@ -94,10 +94,12 @@ sys_uptime(void)
 
 //albert:return current date 
 int 
-sys_date(struct rtcdate *r)
+sys_date(void)
 {
+	struct rtcdate *r;
 	if(argptr(0,(void *)&r,sizeof(*r)) < 0)
 		return -1;
+	cprintf("albert:sys_date\n");
 	cmostime(r);
 	return 0;
 }
