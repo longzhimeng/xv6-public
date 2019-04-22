@@ -63,3 +63,6 @@ struct proc {
 //   original data and bss
 //   fixed-size stack
 //   expandable heap
+
+//albert
+struct proc* findReadyProcess(int *index1, int *index2, int *index3, uint *priority);
