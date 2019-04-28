@@ -181,3 +181,17 @@ int sys_chpr(void)
 	cprintf("albert:pid=%d,pr=%d\n",pid,pr);
 	return chpr(pid,pr);
 }
+
+
+//albert
+int sys_wastestack(void)
+{
+	int recursive;
+
+	if(argint(0,&recursive) < 0)
+		return -1;
+	cprintf("albert:recursive=%d\n",recursive);
+
+	wastestack(recursive);
+	return 0;
+}

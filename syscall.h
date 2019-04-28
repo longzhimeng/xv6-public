@@ -26,3 +26,4 @@
 #define SYS_cps    24
 #define SYS_getptable 25
 #define SYS_chpr   26
+#define SYS_wastestack 27

@@ -190,6 +190,7 @@ UPROGS=\
 	_foo\
 	_nice\
 	_ps\
+	_wastestack\
 
 fs.img: mkfs README $(UPROGS)
 	./mkfs fs.img README $(UPROGS)
@@ -261,7 +262,7 @@ qemu-nox-gdb: fs.img xv6.img .gdbinit
 EXTRA=\
 	mkfs.c ulib.c user.h cat.c echo.c forktest.c grep.c kill.c\
 	ln.c ls.c mkdir.c rm.c stressfs.c usertests.c wc.c app.c zombie.c date.c\
-	printf.c scanf.c umalloc.c alarmtest.c foo.c ps.c nice.c\
+	printf.c scanf.c umalloc.c alarmtest.c foo.c ps.c nice.c wastestack.c\
 	README dot-bochsrc *.pl toc.* runoff runoff1 runoff.list\
 	.gdbinit.tmpl gdbutil\
 

@@ -110,6 +110,7 @@ extern int sys_alarm(void);
 extern int sys_cps(void);
 extern int sys_getptable(void);
 extern int sys_chpr(void);
+extern int sys_wastestack(void);
 
 static int (*syscalls[])(void) = {
 [SYS_fork]    sys_fork,
@@ -139,6 +140,7 @@ static int (*syscalls[])(void) = {
 [SYS_cps]     sys_cps,
 [SYS_getptable] sys_getptable,
 [SYS_chpr]    sys_chpr,
+[SYS_wastestack] sys_wastestack,
 };
 
 //albert

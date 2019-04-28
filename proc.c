@@ -703,6 +703,20 @@ cps(void)
   return 22;
 }
 
+//albert
+void
+wastestack(int recursive)
+{
+  	struct proc *p = myproc();
+
+	cprintf("recursive = %d\n",recursive);
+	while(recursive){
+		wastestack(recursive-1);
+	}
+
+//	panic("wastestack: no kstack");
+}
+
 struct proc *getptable_proc(void) {
   return ptable.proc;
 }

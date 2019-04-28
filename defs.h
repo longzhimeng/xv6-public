@@ -119,6 +119,7 @@ void            yield(void);
 //albert
 int             cps (void);
 int 			chpr(int,int);
+void 			wastestack(int);
 
 // swtch.S
 void            swtch(struct context**, struct context*);

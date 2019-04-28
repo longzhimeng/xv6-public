@@ -29,6 +29,7 @@ int alarm(int ticks,void (*handler)());
 int cps(void);
 int getptable(int, void*);
 int chpr(int, int);
+int wastestack(int);
 
 // ulib.c
 int stat(const char*, struct stat*);
